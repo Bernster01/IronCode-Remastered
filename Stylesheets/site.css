@@ -1,0 +1,27 @@
+body{
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}
+#gameCanvas{
+    width: 99vw;
+    height: 98vh;
+    border: 5px solid black;
+}
+#Performance-Container{
+    position: fixed;
+    top: 0;
+    right: 0;
+    margin-right: 1rem;
+    margin-top: 1rem;
+    font-size: 24pt;
+    background-color: rgba(0,0,0,0.2);
+    padding: 1rem;
+    color:white;
+}
+#background-image{
+    background-size: cover;
+    background-repeat: no-repeat;
+}
