@@ -71,7 +71,7 @@ class enemy {
                 
                 this.x += this.xSpeed * step;
                 this.y += this.ySpeed * step;
-
+ 
 
             }
         }
