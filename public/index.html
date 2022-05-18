@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>IronCode: Remastered</title>
+    <link rel="stylesheet" type="text/css" href="Stylesheets/site.css" />
+    
+</head>
+
+<body onload="">
+
+<canvas id="gameCanvas" width=1920 height=1080></canvas>
+<div id="Performance-Container">
+<span id="FPS"></span>
+</div>
+<div id="player-bars">
+    <div id="player-health-bar" class="player-bar">
+        <div id="player-health-bar-inner" class="player-bar-inner"></div>
+    </div>
+    <div id="player-mana-bar" class="player-bar">
+        <div id="player-mana-bar-inner" class="player-bar-inner"></div>
+    </div>
+    <div id="player-stamina-bar" class="player-bar">
+        <div id="player-stamina-bar-inner" class="player-bar-inner"></div>
+    </div>
+
+</div>
+
+<script src="/socket.io/socket.io.js"></script>
+<script type="text/javascript" src="js/PlayerComponent.js"></script>
+<script src ="js/index.js"></script>
+
+
+
+
+
+<script type="text/javascript" src="js/GameArea.js"></script>
+<script type="text/javascript" src="js/Enemy.js"></script>
+<script type="text/javascript" src="js/Controls.js"></script>
+
+
+</body>
+</html>

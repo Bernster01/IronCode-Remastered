@@ -1,0 +1,24 @@
+{
+  "name": "ironcode",
+  "version": "1.0.0",
+  "description": "��#\u0000 \u0000I\u0000r\u0000o\u0000n\u0000C\u0000o\u0000d\u0000e\u0000-\u0000R\u0000e\u0000m\u0000a\u0000s\u0000t\u0000e\u0000r\u0000d\u0000\r\u0000 \u0000",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Bernster01/IronCode-Remasterd.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Bernster01/IronCode-Remasterd/issues"
+  },
+  "homepage": "https://github.com/Bernster01/IronCode-Remasterd#readme",
+  "dependencies": {
+    "express": "^4.18.1",
+    "http": "^0.0.1-security",
+    "socket.io": "^4.5.1"
+  }
+}

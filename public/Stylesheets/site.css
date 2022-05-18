@@ -1,0 +1,61 @@
+body{
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}
+#gameCanvas{
+    width: 99vw;
+    height: 98vh;
+    border: 5px solid black;
+}
+#Performance-Container{
+    position: fixed;
+    top: 0;
+    right: 0;
+    margin-right: 1rem;
+    margin-top: 1rem;
+    font-size: 24pt;
+    background-color: rgba(0,0,0,0.2);
+    padding: 1rem;
+    color:white;
+}
+#background-image{
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+#player-bars{
+    position:fixed;
+    top:0;
+    left:0;
+    margin: 2rem 0rem 0rem 8rem;
+    --bar-height: 1vh;
+}
+.player-bar{
+    width:200px;
+    height: var(--bar-height);
+    background-color: gray;
+    border-radius:1rem;
+    margin-top:0.5rem;
+    box-shadow: 2px 2px 2px black;
+    overflow:hidden
+}
+.player-bar-inner{
+    width:100px;
+    height: var(--bar-height);
+    
+    border-radius:1rem;
+    transition: width 0.2s;
+}
+#player-health-bar-inner{
+    background-color: red;
+}
+#player-mana-bar-inner{
+    background-color: blue;
+}
+#player-stamina-bar-inner{
+    background-color: green;
+    transition: none !important;
+}
+
