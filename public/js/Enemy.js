@@ -1,11 +1,12 @@
 let enemies = [];
 class enemy {
-    constructor(x, y, width, height, speed) {
+    constructor(x, y, width, height, speed, id) {
         this.x = x
         this.y = y
         this.width = width
         this.height = height
         this.speed = speed
+        this.id = id
         this.xSpeed = 0;
         this.ySpeed = 0;
         this.states = {
@@ -35,6 +36,8 @@ class enemy {
         this.kill = () => {
             this.isDying = true
             this.state = this.states.die
+            socket.emit("enemyIsDying", { id: this.id });
+            console.log(this.id)
         }
         //Logic update
         this.update = (step, worldWidth, worldHeight) => {
@@ -43,9 +46,18 @@ class enemy {
                 if (this.isEnraged) {
                     step *= this.runMultiplier;
                 }
-                //get player position
-                let playerX = game.player.x;
-                let playerY = game.player.y;
+                //get closest player in players
+                let closestPlayer = players[0];
+                let closestDistance = Math.sqrt(Math.pow(closestPlayer.x - this.x, 2) + Math.pow(closestPlayer.y - this.y, 2));
+                for (let i = 0; i < players.length; i++) {
+                    let distance = Math.sqrt(Math.pow(players[i].x - this.x, 2) + Math.pow(players[i].y - this.y, 2));
+                    if (distance < closestDistance) {
+                        closestPlayer = players[i];
+                        closestDistance = distance;
+                    }
+                }
+                let playerX = closestPlayer.x;
+                let playerY = closestPlayer.y;
                 //get distance between player and enemy
                 let distanceX = playerX - this.x;
                 let distanceY = playerY - this.y;
@@ -129,6 +141,8 @@ class enemy {
                 } else{
                     this.isAlive = false;
                     this.deathFrameCount = 0;
+                    socket.emit("enemyDied", { id: this.id });
+                   
                 }
             }
         }
@@ -139,13 +153,20 @@ class enemy {
 const enemyAi = {
     bat: batAi
 }
-function spawnEnemy(x, y, width, height, speed) {
-    enemies.push(new enemy(x, y, width, height, speed));
+function spawnEnemy(x, y, width, height, speed,id) {
+    enemies.push(new enemy(x, y, width, height, speed,id));
 }
 function spawnEnemies(number, x, y) {
     //spawn enemies with random speed between 100-199
     for (let i = 0; i < number; i++) {
-        spawnEnemy(x, y, 64, 64, getRandomNumberBetweenNumbers(100, 199));
+        socket.emit("spawnEnemy", {
+            x: x,
+            y: y,
+            width: 50,
+            height: 50,
+            id:0,
+            speed: Math.floor(Math.random() * 100) + 100
+        });
     }
 }
 function getRandomNumberBetweenNumbers(min, max) {

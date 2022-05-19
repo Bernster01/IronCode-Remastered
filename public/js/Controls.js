@@ -24,6 +24,8 @@ window.document.addEventListener("keydown", (e) => {
             break;
         case 13:
             game.play();
+            game.player.id = players.length;
+            socket.emit("join", { playerObject: game.player });
             break;
 
     }

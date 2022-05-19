@@ -98,7 +98,7 @@ class camera {
             }
 
             this.viewportRect.set(this.xView, this.yView);
-           
+
             if (!this.viewportRect.within(this.worldRect)) {
                 if (this.viewportRect.left < this.worldRect.left)
                     this.xView = this.worldRect.left;
@@ -109,7 +109,7 @@ class camera {
                 if (this.viewportRect.bottom > this.worldRect.bottom)
                     this.yView = this.worldRect.bottom - this.viewportHeight;
             }
-            
+
         }
     }
 }
@@ -161,7 +161,7 @@ function prepareGame(game, fps) {
     game.player = new player(game.world.width / 2, game.world.height / 2, 50, 50);
     game.vWidth = Math.min(game.world.width, game.canvas.width);
     game.vHeight = Math.min(game.world.height, game.canvas.height);
-    
+
     game.camera = new camera(0, 0, game.vWidth, game.vHeight, game.world.width, game.world.height, "both");
     game.camera.follow(game.player, game.vWidth / 2, game.vHeight / 2);
     game.update = () => {
@@ -169,15 +169,15 @@ function prepareGame(game, fps) {
         let enemiesToRemove = [];
         enemies.forEach(enemy => {
             enemy.update(gameSettings.step, game.world.width, game.world.height);
-            if(checkIfObjectIsOutOfBounds(enemy, game.world.width, game.world.height)){
-                
-                    enemiesToRemove.push(enemy);
+            if (checkIfObjectIsOutOfBounds(enemy, game.world.width, game.world.height)) {
+
+                enemiesToRemove.push(enemy);
             }
-            if(!enemy.isAlive){
+            if (!enemy.isAlive) {
                 enemiesToRemove.push(enemy);
             }
 
-                    
+
 
 
         });
@@ -185,21 +185,42 @@ function prepareGame(game, fps) {
             enemies.splice(enemies.indexOf(enemy), 1);
         });
         game.camera.update();
+        // players.forEach(player => {
+            
+        //     if (player.id != game.player.id) {
+        //         player.update2(gameSettings.step, game.world.width, game.world.height);
+        //     }
+        // });
         let newPlayer = game.player;
-        socket.emit("playerUpdate", {playerObject: newPlayer});
+        socket.emit("playerUpdate", { playerObject: newPlayer });
 
     }
     game.render = () => {
         game.context.clearRect(0, 0, game.canvas.width, game.canvas.height);
         game.world.map.draw(game.context, game.camera.xView, game.camera.yView);
         game.player.draw(game.context, game.camera.xView, game.camera.yView);
+        //if players are inside the camera render them else dont
+
+        players.forEach(player => {
+            if (player.id != game.player.id) {
+                if (player.x > game.camera.xView - player.width && player.x < game.camera.xView + game.camera.viewportWidth && player.y > game.camera.yView - player.height && player.y < game.camera.yView + game.camera.viewportHeight) {
+
+
+                    player.draw(game.context, game.camera.xView, game.camera.yView);
+
+                }
+            }
+        });
+
         enemies.forEach(enemy => {
             enemy.draw(game.context, game.camera.xView, game.camera.yView, game.camera);
-        }) 
+        })
     }
     game.gameLoop = () => {
         game.update();
+
         game.render();
+
         uiUpdate();
         // console.log(game.player.x, game.player.y, game.camera.xView, game.camera.yView);
     }
@@ -215,22 +236,22 @@ function prepareGame(game, fps) {
 
     }
     game.pause = () => {
-        if(game.state == -1){
+        if (game.state == -1) {
             game.play();
-        }else{
+        } else {
             clearInterval(game.state);
             game.state = -1;
             console.log("Paused");
         }
     }
-    setTimeout(() => {
-        game.update();
-        game.render();
-    }, 1000);
+    // setTimeout(() => {
+    //     game.update();
+    //     game.render();
+    // }, 1000);
     let playerObject = game.player;
     playerObject.id = players.length;
-    console.log(players);
-    socket.emit("join", {playerObject});
+    // console.log(players);
+    // socket.emit("join", {playerObject});
     uiStaticPropUpdate();
 }
 prepareGame(game, 60);
@@ -249,17 +270,20 @@ function refreshLoop() {
     document.getElementById('FPS').innerHTML = " FPS:" + fpsCounter;
 
 }
-function uiUpdate(){
+function uiUpdate() {
     //Calc players health loss as % of max health
     let healthLoss = (game.player.health / game.player.maxHealth) * 100;
     let staminaLoss = (game.player.stamina / game.player.maxStamina) * 100;
     document.getElementById('player-health-bar-inner').style.width = healthLoss + "%";
     document.getElementById('player-stamina-bar-inner').style.width = staminaLoss + "%";
 }
-function uiStaticPropUpdate(){
-    document.getElementById("player-health-bar").style.width = game.player.maxHealth*2 + "px";
-    document.getElementById("player-health-bar-inner").style.width = game.player.maxHealth*2 + "px";
-    document.getElementById("player-stamina-bar").style.width = game.player.maxStamina *1.2 + "px";
-    document.getElementById("player-stamina-bar-inner").style.width = game.player.maxStamina *1.2 + "px";
+function uiStaticPropUpdate() {
+    document.getElementById("player-health-bar").style.width = game.player.maxHealth * 2 + "px";
+    document.getElementById("player-health-bar-inner").style.width = game.player.maxHealth * 2 + "px";
+    document.getElementById("player-stamina-bar").style.width = game.player.maxStamina * 1.2 + "px";
+    document.getElementById("player-stamina-bar-inner").style.width = game.player.maxStamina * 1.2 + "px";
 }
 refreshLoop();
+function resetGameAndServer() {
+    socket.emit("stop");
+}
